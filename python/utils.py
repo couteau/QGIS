@@ -993,9 +993,11 @@ def spatialite_connect(*args, **kwargs):
             break
     if not found:
         raise RuntimeError("Cannot find any suitable spatialite module")
-    
+
     db = os.fspath(args[0])
-    if (isinstance(db, bytes) and db.endswith(b".gpkg")) or (isinstance(db, str) and db.endswith(".gpkg")):
+    if (isinstance(db, bytes) and db.endswith(b".gpkg")) or (
+        isinstance(db, str) and db.endswith(".gpkg")
+    ):
         try:
             cur.execute("SELECT EnableGpkgAmphibiousMode()")
         except (sqlite3.Error, sqlite3.DatabaseError, sqlite3.NotSupportedError):
