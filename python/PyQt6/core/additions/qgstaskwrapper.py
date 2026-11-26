@@ -17,6 +17,8 @@
 
 from qgis._core import QgsTask
 
+NORETURN = object()
+
 
 class QgsTaskWrapper(QgsTask):
     def __init__(self, description, flags, function, on_finished, *args, **kwargs):
@@ -25,7 +27,7 @@ class QgsTaskWrapper(QgsTask):
         self.kwargs = kwargs
         self.function = function
         self.on_finished = on_finished
-        self.returned_values = None
+        self.returned_values = NORETURN
         self.exception = None
 
     def run(self):
@@ -46,7 +48,7 @@ class QgsTaskWrapper(QgsTask):
             self.exception = Exception("Task canceled")
 
         try:
-            if self.returned_values:
+            if self.returned_values is not NORETURN:
                 self.on_finished(self.exception, self.returned_values)
             else:
                 self.on_finished(self.exception)
